@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,13 +39,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.castom_layout, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
-        /*
-        ViewHolder.tvText1.setOnClickListener(new View.OnClickListener()){
-            public void OnClick(View v){
-                int positions
+
+        viewHolder.tvText1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = viewHolder.getAdapterPosition();
+                Item data = mData.get(position);
+                Toast.makeText(parent.getContext(), data.getDesc(), Toast.LENGTH_LONG).show();
             }
-        }
-        */
+        });
 
         return viewHolder;
     }
@@ -54,6 +57,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
        Item item = mData.get(position);
        holder.tvText1.setText(item.getName());
        holder.tvText2.setText(item.getDesc());
+       holder.ivImage.setImageResource(item.getImage());
     }
 
     @Override

@@ -1,9 +1,14 @@
 package com.example.learn;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 ItemTouchHelper.RIGHT |ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                int fromPos = viewHolder.getOldPosition();
+                int fromPos = viewHolder.getAdapterPosition();
                 int toPos = target.getAdapterPosition();
 
                 Collections.swap(items, fromPos, toPos);
@@ -72,8 +77,39 @@ public class MainActivity extends AppCompatActivity {
                     items.remove(position);
                     adapter.notifyDataSetChanged();
                 }
+                else {
+                    adapter.notifyItemChanged(position);
+                }
             }
         };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_layout, null);
+                EditText etName = dialogView.findViewById(R.id.etName);
+                EditText etDesc = dialogView.findViewById(R.id.etDesc);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Add item");
+                builder.setView(dialogView);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Item item = new Item(etName.getText().toString(), etDesc.getText().toString(), R.drawable.ic_launcher_background);
+                        items.add(item);
+                        adapter.notifyItemInserted(items.size() - 1);
+                    }
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.show();
+            }
+        });
 
     }
 }
