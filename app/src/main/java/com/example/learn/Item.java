@@ -5,6 +5,10 @@ public class Item {
     private String name;
     private String desc;
     private int image;
+    private String keyID;
+
+    public Item() {
+    }
 
     public Item(String name, String desc, int image) {
         this.name = name;
@@ -34,5 +38,13 @@ public class Item {
 
     public void setImage(int image) {
         this.image = image;
+    }
+
+    public String getKeyID() {
+        return keyID;
+    }
+
+    public void setKeyID(String keyID) {
+        this.keyID = keyID;
     }
 }
